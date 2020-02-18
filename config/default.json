@@ -1,0 +1,6 @@
+// All the default values
+
+{
+  "mongoURI": "mongodb+srv://marty_123:marty_123@devconnector-fz5nt.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
+}
