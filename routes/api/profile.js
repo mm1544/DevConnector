@@ -1,6 +1,9 @@
 // Fetching and updating profiles
 
 const express = require('express');
+const request = require('request');
+// To access "default.json"
+const config = require('config');
 // Need Express router to have routes in separate files.
 const router = express.Router();
 // Getting middleware to protect this route
@@ -267,6 +270,132 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
   // Sending back a response
   res.json(profile);
   try {
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT api/profile/education
+// @desc    Add profile education
+// @access  Private
+router.put(
+  '/education',
+  [
+    auth,
+    [
+      // Need a validation for a school, degree and a from-date
+      check('school', 'School is required')
+        .not()
+        .isEmpty(),
+      check('degree', 'Degree is required')
+        .not()
+        .isEmpty(),
+      check('fieldofstudy', 'Field of study is required')
+        .not()
+        .isEmpty(),
+      check('from', '"From" date is required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    // If there are errors
+    if (!errors.isEmpty) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    // Creating Obj. with the data that user SUBMITS
+    // Instead of eg. "title: title" we use just "title"
+    const newEducation = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      // "unshift()" pushes data to the beginning of array
+      profile.education.unshift(newEducation);
+
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route   DELETE api/profile/education/:edu_id
+// @desc    Delete education from profile
+// @access  Private
+router.delete('/education/:edu_id', auth, async (req, res) => {
+  const profile = await Profile.findOne({ user: req.user.id });
+
+  // Get remove index
+  const removeIndex = profile.education
+    .map(item => item.id)
+    .indexOf(req.params.edu_id);
+
+  // "splice()" to take item out
+  profile.education.splice(removeIndex, 1);
+  await profile.save();
+  // Sending back a response
+  res.json(profile);
+  try {
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/profile/github/:username
+// @desc   Get user repositories from GitHub
+// @access  Public
+router.get('/github/:username', (req, res) => {
+  try {
+    const options = {
+      // Adding username, which has been passed through the URL
+      // "per_page=5" -
+      // "sort=created:asc" - will sort by creation date, ascending order
+
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        'githubClientId'
+      )}client_secret=${config.get('githubSecret')}`,
+      method: 'GET',
+      headers: { 'user-agent': 'node.js' }
+    };
+    // Takes in "options" and a callback-fn which will take in: #possible error, #response and #body
+    request(options, (error, response, body) => {
+      if (error) {
+        console.error(error);
+      }
+      // Will check for "200" response. If it is not IT, then will send "404" error ("not found")
+      if (response.statusCode !== 200) {
+        return res.status(404).json({ msg: 'No Github profile found' });
+      }
+      // If profile is found
+      // "body" is a regular string therefore it needs to be parsed before sending it
+      res.json(JSON.parse(body));
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
