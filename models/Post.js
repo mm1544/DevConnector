@@ -5,6 +5,7 @@ const PostSchema = new Schema({
   // Want Post to be connected to the User, therefore "user" will reference to existing user
   user: {
     type: Schema.Types.ObjectId,
+    // 'user'?
     ref: 'users'
   },
   text: {
@@ -24,6 +25,7 @@ const PostSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
+        // 'user'?
         ref: 'users'
       }
     }
