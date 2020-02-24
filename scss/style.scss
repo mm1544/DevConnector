@@ -1,0 +1,84 @@
+// Variables are in _config.scss
+@import 'config';
+@import 'utilities';
+
+// ###
+// Basic resets in core styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  // 1rem is equal to whatever is the default size of the root "html" tag is
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #fff;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  // from _config.scss
+  color: $primary-color;
+}
+
+ul {
+  // removing bullets for the list
+  list-style: none;
+}
+
+// Want image to take a full width of their container, without braking-out
+img {
+  width: 100%;
+}
+
+// ###
+// Navbar
+.navbar {
+  /*
+  Flexbox VS. Grid
+Grid: for main layouts - eg. boxes in profile page
+Flexbox: for aligning elements inside of a Navbar (easier than to use Grid for such a little things)
+  */
+
+  // Flexbox; everything aligns horizontaly
+  display: flex;
+  align-items: center;
+  // To put all the awailable space inbetween elements
+  justify-content: space-between;
+  padding: 0.7rem 2rem;
+  // To keep Navbar always at the top
+  position: fixed;
+  // Allways o top of the rest of the content
+  z-index: 1;
+  width: 100%;
+  // From the top - 0 position...
+  top: 0;
+  border-bottom: solid 1px $primary-color;
+  opacity: 0.9;
+
+  // Sass allowes to nes selectors
+
+  ul {
+    display: flex;
+  }
+
+  a {
+    color: #fff;
+    padding: 0.45rem;
+    margin: 0 0.25rem;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+// Landing
+.landing {
+  // Then we are able to do "absolute" positioning within
+  position: relative;
+}
