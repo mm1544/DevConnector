@@ -1,3 +1,7 @@
+/*
+ Main styles for specific components (eg. Navbar, Landing Page)
+*/
+
 // Variables are in _config.scss
 @import 'config';
 @import 'utilities';
@@ -81,4 +85,25 @@ Flexbox: for aligning elements inside of a Navbar (easier than to use Grid for s
 .landing {
   // Then we are able to do "absolute" positioning within
   position: relative;
+  background: url('../img/showcase.jpg') no-repeat center center/cover;
+  // Entire height of the browser
+  height: 100vh;
+
+  // Making "landing-inner" class
+  &-inner {
+    color: #fff;
+    // will be using Flexbox to align everything
+    height: 100%;
+    // Arranges objects in the row (side by side)
+    display: flex;
+    // Will arrange objects vertical (instead of horiz.)
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    // To center horizontaly
+    align-items: center;
+    // To center verticaly
+    justify-content: center;
+    text-align: center;
+  }
 }

@@ -1,3 +1,25 @@
+/*
+Utility classes
+*/
+
+// Text Styles
+.x-large {
+  font-size: 4rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.large {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+// For paragraph
+.lead {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
 // Backgrounds (eg. bg-primary, bg-light, etc.)
 .bg {
   // In Sass: "&" is just a placeholder, it will be replaced with "bg"
@@ -22,4 +44,79 @@
     @include set-background(#fff);
     border: #ccc 1px solid;
   }
+}
+
+// Buttons
+.btn {
+  display: inline-block;
+  // Default background of light color
+  background: $light-color;
+  // For text
+  color: #333;
+  padding: 0.4rem 1.3rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  // When there are few buttons in a row, want to push last one over
+  margin-right: 0.5rem;
+  outline: none;
+  // To slow down effects
+  transition: all 0.2s ease-in;
+
+  // For different color classes
+  // (eg. btn-primary is a "sub-class" of "btn"
+  &.btn-primary {
+    @include set-background($primary-color);
+
+    &:hover {
+      // In Saas can use "lightent" and "darken" methods. Passing the color and desired percentage of lightening
+      background: lighten($primary-color, 5%);
+    }
+  }
+
+  &.btn-dark {
+    @include set-background($dark-color);
+
+    &:hover {
+      // In Saas can use "lightent" and "darken" methods. Passing the color and desired percentage of lightening
+      background: lighten($dark-color, 5%);
+    }
+  }
+
+  &.btn-success {
+    @include set-background($success-color);
+
+    &:hover {
+      // In Saas can use "lightent" and "darken" methods. Passing the color and desired percentage of lightening
+      background: lighten($success-color, 5%);
+    }
+  }
+
+  &.btn-danger {
+    @include set-background($danger-color);
+
+    &:hover {
+      // In Saas can use "lightent" and "darken" methods. Passing the color and desired percentage of lightening
+      background: lighten($danger-color, 5%);
+    }
+  }
+
+  &:hover {
+    background: lighten($dark-color, 20%);
+    // Text color
+    color: #fff;
+  }
+}
+
+// Translucent layer, that will be covering "landing"
+.dark-overlay {
+  height: 100%;
+  width: 100%;
+  // Positioning within the "landing" class
+  position: absolute;
+  // Start-points
+  top: 0;
+  left: 0;
+  // 0.7 for transparency
+  background-color: rgba(0, 0, 0, 0.7);
 }
