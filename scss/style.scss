@@ -108,3 +108,104 @@ Flexbox: for aligning elements inside of a Navbar (easier than to use Grid for s
     text-align: center;
   }
 }
+
+// Profiles Page
+.profile {
+  // Will display object as a grid (need columns)
+  display: grid;
+  // Fractions for columns. First column - 2 fractions, 2nd - 4 fractions, 3rd - 2fr.
+  grid-template-columns: 2fr 4fr 2fr;
+  // Gap inbetween items
+  grid-gap: 2rem;
+  align-items: center;
+  padding: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+// Profile Page
+.profile-grid {
+  display: grid;
+  // Instead "grid-template-columns" will use "grid-template-areas" - it allows to visually map what we want...
+  grid-template-areas: 'top top' 'about about' 'exp edu' 'github github';
+  grid-gap: 1rem;
+  // Will assign grid areas ("top", "about", "exp" etc) to actual classes
+  // When aligning object WITHIN main areas of a website - using flex (not mandatory)
+  .profile-top {
+    grid-area: top;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    img {
+      width: 250px;
+    }
+    // For each link in icons class
+    .icons a {
+      color: #fff;
+      margin: 0 0.3rem;
+      &:hover {
+        color: $dark-color;
+      }
+    }
+  }
+
+  .profile-about {
+    grid-area: about;
+    text-align: center;
+
+    .skills {
+      // Skills will be listed side-by-side
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .profile-exp {
+    grid-area: exp;
+  }
+
+  .profile-edu {
+    grid-area: edu;
+  }
+  // ".profile-exp > div" - styling imediate DIV WITHIN .profile-exp
+  .profile-exp,
+  .profile-edu {
+    & > div {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: #ccc 1px dotted;
+    }
+
+    // Last-child pseudo selector to eliminate "border-bottom" line after the last object/element
+    &:last-child {
+      border: none;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .profile-github {
+    grid-area: github;
+
+    .repo {
+      display: flex;
+      // Ajusts spacing
+      & > div:first-child {
+        flex: 7;
+        flex-basis: 70%;
+      }
+
+      & > div:last-child {
+        flex: 3;
+        flex-basis: 20%;
+      }
+    }
+  }
+}
