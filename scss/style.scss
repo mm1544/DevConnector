@@ -209,3 +209,26 @@ Flexbox: for aligning elements inside of a Navbar (easier than to use Grid for s
     }
   }
 }
+
+// Posts Page
+.post-form-header {
+  padding: 0.5rem;
+}
+
+.post {
+  display: grid;
+  // "1fr 4fr" - 1 fraction, 4 fraction (it describes how obj with "post" will distribute space between its content obj)
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 2rem;
+  align-items: center;
+  // Accesses direct DIV
+  & > div:first-child {
+    text-align: center;
+  }
+  img {
+    // Fixed size of an image. Without it, the image size changes (!)
+    width: 150px;
+  }
+}
+// Import from "_mobile.scss"
+@import 'mobile';
