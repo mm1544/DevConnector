@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import axios from 'axios';
-
+import { Link } from 'react-router-dom';
 /*
  Each input needs to have its own state. Need onchangeHandler to update the state when it is typing. Will use useState Hook.
 */
@@ -35,38 +34,7 @@ const Register = () => {
       // Will make it an alert later
       console.log('Passwords do not match');
     } else {
-      // Creating a new object "filled" with data from the form
-      const newUser = {
-        // Same as name: name
-        name,
-        email,
-        password
-      };
-
-      try {
-        // Since we are sending data, we want to create "config" object that has a "headers" obj.
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
-
-        // Creating "body" obj. that will be sent
-        const body = JSON.stringify(newUser);
-        /*
-        # axios will make a post request. 
-        # axios returns a prmise therefore need "await"
-        # POST request is made to '/api/users' (because we added a proxy: "proxy": "http://localhost:5000")
-        # 2nd parameter is the data from the form
-        # 3rd param is "config" which has a headers value of the content type
-        */
-        //  "proxy": "http://localhost:5000"
-        const res = await axios.post('/api/users', body, config);
-        // We are getting back res.data - there should be TOKEN
-        console.log(res.data);
-      } catch (err) {
-        console.error(err.response.data);
-      }
+      console.log('success');
     }
   };
 
@@ -109,7 +77,7 @@ const Register = () => {
           <input
             type='password'
             placeholder='Password'
-            // minLength='6'
+            minLength='6'
             name='password'
             value={password}
             onChange={e => onChange(e)}
@@ -119,7 +87,7 @@ const Register = () => {
           <input
             type='password'
             placeholder='Confirm Password'
-            // minLength='6'
+            minLength='6'
             name='password2'
             value={password2}
             onChange={e => onChange(e)}
@@ -130,7 +98,7 @@ const Register = () => {
 
       {/* <!-- "my" margin on y axis (top and bottom)--> */}
       <p className='my-1'>
-        Already have an account?<a href='login.html'>Sign In</a>
+        Already have an account?<Link to='/login'>Sign In</Link>
       </p>
     </Fragment>
   );
