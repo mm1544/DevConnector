@@ -77,7 +77,7 @@ router.post(
       // Will create a "hash" and will put it into "user.password"
       user.password = await bcrypt.hash(password, salt);
 
-      // Saving to the DB (need "await" inf front of any method that returns a promisse)
+      // Saving to the DB (need "await" in front of any method that returns a promisse)
       await user.save();
 
       // // Return jsonwebtoken (need jwt because in the front-end, when the user registers, we want them to get logged-in right away, and to log-in you need JWT)
