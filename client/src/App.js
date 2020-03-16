@@ -24,7 +24,7 @@ const App = () => (
         {/* Every page within the theme (except for the landing page) has a className="container" to push the content to the middle */}
         <section className='container'>
           <Alert />
-          {/* Wrapping everything in the Switch */}
+          {/* Wrapping everything in the Switch. Switch can have only routes in it */}
           <Switch>
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />

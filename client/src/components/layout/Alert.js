@@ -19,7 +19,8 @@ const Alert = ({ alerts }) =>
   ));
 
 Alert.propTypes = {
-  // shortcut: 'ptar'
+  // alerts is now going to be in props, therefore need to:
+  // (shortcut: 'ptar')
   alerts: PropTypes.array.isRequired
 };
 
@@ -30,7 +31,10 @@ Arrow fn takes 'state' as a parameter.
 */
 
 const mapStateToProps = state => ({
-  // Calling whatever it is needed from the reducer (../reducers/alert.js). Now will have 'props.alerts' awailable to us.
+  /*
+  In this case, want to get the 'alert' state. We want to fetch state-data into this component
+  */
+  // Calling whatever it is needed from the root reducer (../reducers/alert.js). Now will have 'props.alerts' awailable to us.
   alerts: state.alert
 });
 

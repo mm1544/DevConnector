@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 // CONNECTING Register component to the Redux by using 'connect' (from react-redux package)
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 // Prop types
 import PropTypes from 'prop-types';
 
@@ -12,7 +13,7 @@ import PropTypes from 'prop-types';
  ('connect' allows to access props.setAlert).
  Destructuring 'props' --> {setAlert}
 */
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
   /*
   "formData" is a state/object with all the field values. "setFormData" - is a function to update the state.
   To "useState" passing initial state
@@ -25,7 +26,7 @@ const Register = ({ setAlert }) => {
     password2: ''
   });
 
-  // Destructuring for convenience
+  // Destructuring for convenience ('formData' is a COMPONENT state)
   const { name, email, password, password2 } = formData;
 
   /*
@@ -38,11 +39,13 @@ const Register = ({ setAlert }) => {
   const onSubmit = async e => {
     // Preventing default action ie. reloading (??)
     e.preventDefault();
-    // when using useState Hook, can access the state from anywhere (no need to pass the state)
+    // When using useState Hook, can access the state from anywhere (no need to pass the state)
     if (password !== password2) {
+      // setAlert(msg, alertType, )
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log('success');
+      // Calling an function/action 'register'
+      register({ name, email, password });
     }
   };
 
@@ -64,7 +67,7 @@ const Register = ({ setAlert }) => {
             value={name}
             // Calling custom "onChange" method (which will use "setFormData") to update "name" field of the state
             onChange={e => onChange(e)}
-            required
+            // required
           />
         </div>
         <div className='form-group'>
@@ -74,7 +77,7 @@ const Register = ({ setAlert }) => {
             name='email'
             value={email}
             onChange={e => onChange(e)}
-            required
+            // required
           />
           <small className='form-text'>
             This site uses Gravatar, so if you want a profile image, use a
@@ -85,7 +88,7 @@ const Register = ({ setAlert }) => {
           <input
             type='password'
             placeholder='Password'
-            minLength='6'
+            // minLength='6'
             name='password'
             value={password}
             onChange={e => onChange(e)}
@@ -95,7 +98,7 @@ const Register = ({ setAlert }) => {
           <input
             type='password'
             placeholder='Confirm Password'
-            minLength='6'
+            // minLength='6'
             name='password2'
             value={password2}
             onChange={e => onChange(e)}
@@ -114,11 +117,17 @@ const Register = ({ setAlert }) => {
 
 Register.propTypes = {
   // 'setAlert' as a PropType. It is a function (shortcut: ptfr)
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 };
 
 /*
 When using 'connect' need to include it to the export. Connect takes in 2 parameters: state that you want to map(?) and object with actions that you want to use. Passing 'setAlert' in here, makes 'setAlert' awailable within props "props.setAlert"
 */
 
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);
+
+/*
+Summary:
+Importing 'connect' allwes to work with Redux. Importing 'setAlert' action and adding 'setAlert' to the export allwes us to access it within props. 
+*/
