@@ -1,7 +1,7 @@
 // Main App component
 
 // Fragment is a "gost" element it will not show up in the DOM
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
@@ -12,27 +12,47 @@ import Alert from './components/layout/Alert';
 // 'Provider' comes from React, Redux package. Redux is separate from React but Provider will combine them together...(?) We will achieve that by surrounding entire App with Provider...
 import { Provider } from 'react-redux';
 import store from './store';
+// Importing action (to call it will use 'useEffect' hook)
+import { loadUser } from './actions/auth';
+import setAuthToken from './utils/setAuthToken';
 import './App.css';
 
-const App = () => (
-  <Provider store={store}>
-    {/* // Need to wrap everything within Router */}
-    <Router>
-      <Fragment>
-        <Navbar />
-        <Route exact path='/' component={Landing} />
-        {/* Every page within the theme (except for the landing page) has a className="container" to push the content to the middle */}
-        <section className='container'>
-          <Alert />
-          {/* Wrapping everything in the Switch. Switch can have only routes in it */}
-          <Switch>
-            <Route exact path='/register' component={Register} />
-            <Route exact path='/login' component={Login} />
-          </Switch>
-        </section>
-      </Fragment>
-    </Router>
-  </Provider>
-);
+// Checking localStorage
+if (localStorage.token) {
+  // Will set the header (global header) with the token
+  setAuthToken(localStorage.token);
+}
+
+const App = () => {
+  // Hook takes-in a function
+  /*
+   When state updates, 'useEffect' will keep running and it will be a CONSTANT LOOP, UNLESS we will add a second parameter '[]'. In this case it will run just once. We want it just to !run once! when it is loaded/mounted (Will NOT re-run).
+  */
+  useEffect(() => {
+    // Way to dispatch 'loadUser' action.
+    store.dispatch(loadUser());
+  }, []);
+
+  return (
+    <Provider store={store}>
+      {/* // Need to wrap everything within Router */}
+      <Router>
+        <Fragment>
+          <Navbar />
+          <Route exact path='/' component={Landing} />
+          {/* Every page within the theme (except for the landing page) has a className="container" to push the content to the middle */}
+          <section className='container'>
+            <Alert />
+            {/* Wrapping everything in the Switch. Switch can have only routes in it */}
+            <Switch>
+              <Route exact path='/register' component={Register} />
+              <Route exact path='/login' component={Login} />
+            </Switch>
+          </section>
+        </Fragment>
+      </Router>
+    </Provider>
+  );
+};
 
 export default App;

@@ -14,12 +14,12 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
 // @route   GET api/auth
-// @desc    Test route. Using "auth" middleware will make this route protected. This route has to return user's data.
+// @desc    Using "auth" middleware will make this route protected. This route has to return user's data.
 // @access  Public
 router.get('/', auth, async (req, res) => {
   try {
-    // This is protected route and we use a token that has the id. In middleware we set "req.user" = to the "user" in the token (decoded.user).
-    // Don't want to return password, therefore: ".select('-password')"
+    // This is protected route and we use a !token that has the id!. In middleware we set "req.user" = to the "user" in the token (decoded.user).
+    // Don't want to return/send the password, therefore: ".select('-password')"
     const user = await User.findById(req.user.id).select('-password');
     // Sending user
     res.json(user);

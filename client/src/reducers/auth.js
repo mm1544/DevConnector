@@ -1,4 +1,9 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL } from '../actions/types';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  AUTH_ERROR,
+  USER_LOADED
+} from '../actions/types';
 
 // State for authentication
 const initialState = {
@@ -17,15 +22,29 @@ const initialState = {
   */
 
   loading: true,
+  /*
+  When will make a request to the backend to the 'api/auth' and will get the user data (name, email, avatar ect.), it will be put in here.
+  */
+
   user: null
 };
 
 // Takes in the 'action' which is dispatched
 export default function(state = initialState, action) {
   const { type, payload } = action;
+
   switch (type) {
+    // It will 'load' the user(in the state)
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        // Since 'payload' includes the user (name, email, avatar...)
+        user: payload
+      };
     case REGISTER_SUCCESS:
-      // Want the user to be logged-in, therefore will put token (which is returned) to the localStorage
+      // Setting the token
       localStorage.setItem('token', payload.token);
       /*
       Setting  'isAuthenticated' to true, and 'loading' to false
@@ -37,14 +56,19 @@ export default function(state = initialState, action) {
         loading: false
       };
 
+    //For both cases: REGISTER_FAIL and AUTH_ERROR
     case REGISTER_FAIL:
-      // Removes everything what is stored in localStorage as a 'token'
+    case AUTH_ERROR:
+      /*
+      If registration failed, want to clear localStorage from any 'token' (Don't want token that is Not walid in local storage).
+      */
       localStorage.removeItem('token');
       return {
         ...state,
         // 'token' value in the state is set to null
         token: null,
         isAuthenticated: false,
+        // Even it failed, the loading is done
         loading: false
       };
     default:
