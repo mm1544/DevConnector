@@ -1,15 +1,21 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+// Connecting to Redux
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Login action
+import { login } from '../../actions/auth';
 
 /*
- Each input needs to have its own state. Need onchangeHandler to update the state when it is typing. Will use useState Hook.
+ Input needs to have its own state. Need onchangeHandler to update the state when it is typing. Will use useState Hook.
+
+ destructuring 'prop' to '{login}'
 */
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
   /*
   "formData" is a state/object with all the field values. "setFormData" - is a function to update the state.
   To "useState" passing initial state
   */
-
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -29,8 +35,15 @@ const Login = () => {
     // Preventing default action ie. reloading (?)
     e.preventDefault();
 
-    console.log('success');
+    // Calling action (!!)
+    login(email, password);
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    // With React router can do '<Redirect...>'
+    return <Redirect to='/dashboard' />;
+  }
 
   return (
     <Fragment>
@@ -72,4 +85,19 @@ const Login = () => {
   );
 };
 
-export default Login;
+// Since we have 'login' in 'props', need to set the propTypes...
+Login.propTypes = {
+  // shortcut: ptfr
+  login: PropTypes.func.isRequired,
+  // shortcut: 'ptb' (boolean prop type)
+  isAuthenticated: PropTypes.bool
+};
+
+// Getting 'isAuthenticated' from 'state.auth' and preparing it to be added to 'props'
+const mapStateProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+// For now mapping state to props in 'null'
+// Passing actions as obj. - '{login}'. Now 'login' is in 'prop'.
+export default connect(mapStateProps, { login })(Login);

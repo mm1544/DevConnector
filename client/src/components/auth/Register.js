@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 // CONNECTING Register component to the Redux by using 'connect' (from react-redux package)
 import { connect } from 'react-redux';
@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
  ('connect' allows to access props.setAlert).
  Destructuring 'props' --> {setAlert}
 */
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   /*
   "formData" is a state/object with all the field values. "setFormData" - is a function to update the state.
   To "useState" passing initial state
@@ -48,6 +48,10 @@ const Register = ({ setAlert, register }) => {
       register({ name, email, password });
     }
   };
+
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
 
   return (
     <Fragment>
@@ -118,14 +122,21 @@ const Register = ({ setAlert, register }) => {
 Register.propTypes = {
   // 'setAlert' as a PropType. It is a function (shortcut: ptfr)
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  // shortcut: 'ptb' (boolean prop type)
+  isAuthenticated: PropTypes.bool
 };
+
+// Getting 'isAuthenticated' from 'state.auth' and preparing it to be added to 'props'
+const mapStateProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
 
 /*
 When using 'connect' need to include it to the export. Connect takes in 2 parameters: state that you want to map(?) and object with actions that you want to use. Passing 'setAlert' in here, makes 'setAlert' awailable within props "props.setAlert"
 */
 
-export default connect(null, { setAlert, register })(Register);
+export default connect(mapStateProps, { setAlert, register })(Register);
 
 /*
 Summary:

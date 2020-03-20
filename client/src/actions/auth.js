@@ -6,7 +6,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   AUTH_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -64,7 +66,10 @@ export const register = ({ name, email, password }) => async dispatch => {
       // Got a token back on successful responce
       payload: res.data
     });
-    // 'err' is an array of errors from the back-end
+
+    dispatch(loadUser());
+
+    // 'errors' is an array of errors from the back-end
   } catch (err) {
     const errors = err.response.data.errors;
     // If there are any errors, will loop through them and for each error will 'dispatch' 'setAlert'
@@ -74,6 +79,45 @@ export const register = ({ name, email, password }) => async dispatch => {
 
     dispatch({
       type: REGISTER_FAIL
+    });
+  }
+};
+
+// Login User Action
+export const login = (email, password) => async dispatch => {
+  // Because the data will be sent, need 'config'
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  // Creating an object from email and password
+  const body = JSON.stringify({ email, password });
+
+  try {
+    // Post request (hitting endpoint '/api/auth' and sending 'body' and 'config')
+    const res = await axios.post('/api/auth', body, config);
+
+    // When login is successful
+    dispatch({
+      type: LOGIN_SUCCESS,
+      // will send the data as a payload
+      payload: res.data
+    });
+
+    // ? Dispatching loadUser action
+    dispatch(loadUser());
+  } catch (err) {
+    // 'errors' is an array of errors (from the back-end)
+    const errors = err.response.data.errors;
+    // If there are any errors, will loop through them and for each error will 'dispatch' 'setAlert'
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: LOGIN_FAIL
     });
   }
 };

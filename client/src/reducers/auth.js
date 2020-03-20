@@ -1,11 +1,17 @@
+/*
+Reducer 'handles' when 'action' are 'dispatched'
+*/
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   AUTH_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL
 } from '../actions/types';
 
-// State for authentication
+// Will be referenced as 'state.auth' (!!!)
 const initialState = {
   /*
   That is the default for a token in our state. 
@@ -43,8 +49,10 @@ export default function(state = initialState, action) {
         // Since 'payload' includes the user (name, email, avatar...)
         user: payload
       };
+    // Both cases do the same
     case REGISTER_SUCCESS:
-      // Setting the token
+    case LOGIN_SUCCESS:
+      // Put the token in localStorage
       localStorage.setItem('token', payload.token);
       /*
       Setting  'isAuthenticated' to true, and 'loading' to false
@@ -56,9 +64,10 @@ export default function(state = initialState, action) {
         loading: false
       };
 
-    //For both cases: REGISTER_FAIL and AUTH_ERROR
+    //For all cases: REGISTER_FAIL, AUTH_ERROR, LOGIN_FAIL
     case REGISTER_FAIL:
     case AUTH_ERROR:
+    case LOGIN_FAIL:
       /*
       If registration failed, want to clear localStorage from any 'token' (Don't want token that is Not walid in local storage).
       */
