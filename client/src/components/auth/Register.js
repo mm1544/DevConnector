@@ -140,5 +140,5 @@ export default connect(mapStateProps, { setAlert, register })(Register);
 
 /*
 Summary:
-Importing 'connect' allwes to work with Redux. Importing 'setAlert' action and adding 'setAlert' to the export allwes us to access it within props. 
+Importing 'connect' allwes to work with Redux. Importing 'setAlert' action and adding 'setAlert' to the export allwes us to access it within props.  
 */

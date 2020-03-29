@@ -21,16 +21,18 @@ router.get('/me', auth, async (req, res) => {
   try {
     // "user" pertain to Profile model's "user" field which is going to  be "ObjectId" of the user.
     // "req.user.id" comes with the Token.
-    // Will POPULATE found "profile" with "name" (of the user) and "avatar". These both fields are in the User model (NOT in Profile mod.)
+    // Will POPULATE found "profile" with "name" (of the user) and "avatar". These both fields are in the User model (NOT in Profile model)
     const profile = await Profile.findOne({
       user: req.user.id
-    }).populate('user', ['name', 'avatar']);
+    });
+
+    // .populate('user', ['name', 'avatar']);
 
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
     }
-    // If profile exists, it will be sent
-    res.json(profile);
+    // If profile exists, it will be populated, and will be sent
+    res.json(profile.populate('user', ['name', 'avatar']));
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -43,7 +45,7 @@ router.get('/me', auth, async (req, res) => {
 router.post(
   '/',
   [
-    // Authorisation diddleware
+    // Authorisation middleware
     auth,
     // Input check middleware
     [

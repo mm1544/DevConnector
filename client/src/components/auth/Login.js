@@ -48,7 +48,7 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     <Fragment>
       {/* HTML's "class" is changed to React's "className" */}
-      <h1 className='large text-primary'>Sign Ip</h1>
+      <h1 className='large text-primary'>Sign In</h1>
       <p className='lead'>
         <i className='fas fa-user'></i>Sign Into Your Account
       </p>

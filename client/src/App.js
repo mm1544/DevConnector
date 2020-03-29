@@ -8,7 +8,9 @@ import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alert';
-// Redux
+import Dashboard from './components/dashboard/Dashboard';
+// Route with embeded authentication
+import PrivateRoute from './components/routing/PrivateRoute';
 // 'Provider' comes from React, Redux package. Redux is separate from React but Provider will combine them together...(?) We will achieve that by surrounding entire App with Provider...
 import { Provider } from 'react-redux';
 import store from './store';
@@ -24,8 +26,9 @@ if (localStorage.token) {
 }
 
 const App = () => {
-  // Hook takes-in a function
   /*
+  'useEffect' is a hook. Takes-in a function.
+
    When state updates, 'useEffect' will keep running and it will be a CONSTANT LOOP, UNLESS we will add a second parameter '[]'. In this case it will run just once. We want it just to !run once! when it is loaded/mounted (Will NOT re-run).
   */
   useEffect(() => {
@@ -47,6 +50,7 @@ const App = () => {
             <Switch>
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
+              <PrivateRoute exact path='/dashboard' component={Dashboard} />
             </Switch>
           </section>
         </Fragment>

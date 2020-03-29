@@ -1,7 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+// To be able to interact with the state to see if user is logged-in
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-const Landing = () => {
+const Landing = ({ isAuthenticated }) => {
+  // If user is loged-in, he cant see/access the Landing-page
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
   return (
     <section className='landing'>
       {/* <!-- We will have a background image but we need  a dark overlay, so that the text is readable, and you can use any image--> */}
@@ -27,4 +35,13 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+Landing.propTypes = {
+  // 'ptb'
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Landing);
