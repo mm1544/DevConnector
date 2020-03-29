@@ -1,14 +1,20 @@
 //shortcut: racfp
 import React, { Fragment, useState } from 'react';
+// To be able to use 'history' obj. need 'withRouter'
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { createProfile } from '../../actions/profile';
 
 /*
 Need an actions to create a profile, to interact with a server, get the responce...
-!First will build a form in the !Component state! (with 'useState' hook). Since it will be a form, each input will be a piece of state.
-*/
+!First will build a form in the !Component state! (with 'useState' hook). Since it will be a form, each input will be a piece of state. 
+'CreateProfile' will get called on submit.
 
-const CreateProfile = props => {
+'createProfile' action (function) is in the props (it was added there with 'connect').
+'history' obj. can be accessed by props.history.
+*/
+const CreateProfile = ({ createProfile, history }) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -49,6 +55,12 @@ const CreateProfile = props => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const onSubmit = e => {
+    e.preventDefault();
+    // 'history' obj. will be used with an action
+    createProfile(formData, history);
+  };
+
   return (
     <Fragment>
       <h1 className='large text-primary'>Create Your Profile</h1>
@@ -58,7 +70,7 @@ const CreateProfile = props => {
       </p>
       <small>* = required fields</small>
 
-      <form className='form'>
+      <form className='form' onSubmit={e => onSubmit(e)}>
         <div className='form-group'>
           <select name='status' value={status} onChange={e => onChange(e)}>
             <option value='0'>* Select Professional Status</option>
@@ -225,6 +237,10 @@ const CreateProfile = props => {
   );
 };
 
-CreateProfile.propTypes = {};
+CreateProfile.propTypes = {
+  // shortcut: 'ptfr'
+  createProfile: PropTypes.func.isRequired
+};
 
-export default CreateProfile;
+// Need 'withRouter' to be able to use 'history' obj. Will wrap the component.
+export default connect(null, { createProfile })(withRouter(CreateProfile));
