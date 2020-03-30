@@ -1,20 +1,22 @@
 //shortcut: racfp
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 // To be able to use 'history' obj. need 'withRouter'
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile } from '../../actions/profile';
+// 'getCurrentProfile' will be used to pre-fill the fields
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
 /*
-Need an actions to create a profile, to interact with a server, get the responce...
-!First will build a form in the !Component state! (with 'useState' hook). Since it will be a form, each input will be a piece of state. 
-'CreateProfile' will get called on submit.
-
-'createProfile' action (function) is in the props (it was added there with 'connect').
-'history' obj. can be accessed by props.history.
+We have to have a 'useEffect' so that we can run 'getCurrentProfile', to fetch the data and send to the state.
 */
-const CreateProfile = ({ createProfile, history }) => {
+
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+  history
+}) => {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
@@ -32,6 +34,35 @@ const CreateProfile = ({ createProfile, history }) => {
 
   // State for social media (by default it's false)
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+  /*
+  With 'useEffect' it would keep relouding, therefore need to put brackets '[loading]' (with a prop that it wants to depend on is 'loading') to prewent that. So useEffect runs when loading===true, and it will fill-up the edit-form fields.
+  */
+
+  useEffect(() => {
+    getCurrentProfile();
+
+    // Will fill the form with current Profile values
+    setFormData({
+      // Checking if it's loading or if there is no 'profile.company'
+      //Same as: "company: (loading || !profile.company ? '' : profile.company)"
+      company: loading || !profile.company ? '' : profile.company,
+      website: loading || !profile.website ? '' : profile.website,
+      location: loading || !profile.location ? '' : profile.location,
+      status: loading || !profile.status ? '' : profile.status,
+      skills: loading || !profile.skills ? '' : profile.skills.join(','),
+      githubusername:
+        loading || !profile.githubusername ? '' : profile.githubusername,
+      bio: loading || !profile.bio ? '' : profile.bio,
+      // Checks if 'social' obj. exists
+      twitter: loading || !profile.social ? '' : profile.social.twitter,
+      facebook: loading || !profile.social ? '' : profile.social.facebook,
+      linkedin: loading || !profile.social ? '' : profile.social.linkedin,
+      youtube: loading || !profile.social ? '' : profile.social.youtube,
+      instagram: loading || !profile.social ? '' : profile.social.instagram
+    });
+    // !!! if it's not set, the app may crash because it will run constantly
+  }, [loading]);
 
   // Destructuring
   const {
@@ -57,8 +88,8 @@ const CreateProfile = ({ createProfile, history }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    // 'history' obj. will be used with an action
-    createProfile(formData, history);
+    // 'history' obj. will be used with an action. Important to add 'true', because it indicates that profile is being edited.
+    createProfile(formData, history, true);
   };
 
   return (
@@ -237,10 +268,17 @@ const CreateProfile = ({ createProfile, history }) => {
   );
 };
 
-CreateProfile.propTypes = {
-  // shortcut: 'ptfr'
-  createProfile: PropTypes.func.isRequired
+EditProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
 // Need 'withRouter' to be able to use 'history' obj. Will wrap the component.
-export default connect(null, { createProfile })(withRouter(CreateProfile));
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  withRouter(EditProfile)
+);
