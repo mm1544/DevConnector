@@ -105,7 +105,7 @@ const AddEducation = ({ addEducation, history }) => {
                 toggleDisabled(!toDateDisabled);
               }}
             />{' '}
-            Currently Studying
+            Current School
           </p>
         </div>
 

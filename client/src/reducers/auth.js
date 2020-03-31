@@ -9,7 +9,8 @@ import {
   USER_LOADED,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  ACCOUNT_DELETED
 } from '../actions/types';
 
 // Will be referenced as 'state.auth' (!!!)
@@ -70,6 +71,7 @@ export default function(state = initialState, action) {
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT:
+    case ACCOUNT_DELETED:
       /*
       If registration failed, want to clear localStorage from any 'token' (Don't want token that is Not walid in local storage).
       */

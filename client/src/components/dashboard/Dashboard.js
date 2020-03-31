@@ -12,14 +12,15 @@ import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
-import { getCurrentProfile } from '../../actions/profile';
+import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 
 /*
-Want to call getCurrentProfile() as soon a s Dasboard loads, in order to do that, since we are using hooks, will use 'useEffect'
+Want to call getCurrentProfile() as soon as Dasboard loads, in order to do that, since we are using hooks, will use 'useEffect'
 */
 
 const Dashboard = ({
   getCurrentProfile,
+  deleteAccount,
   auth: { user },
   profile: { profile, loading }
 }) => {
@@ -45,6 +46,11 @@ const Dashboard = ({
           {/* passing 'experience' array */}
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
+          <div className='my-2'>
+            <button className='btn btn-danger' onClick={() => deleteAccount()}>
+              <i className='fas fa-user-minus'></i> Delete My Account
+            </button>
+          </div>
         </Fragment>
       ) : (
         <Fragment>
@@ -63,6 +69,8 @@ const Dashboard = ({
 Dashboard.propTypes = {
   //...because it is a function (shortcut: ptfr)
   getCurrentProfile: PropTypes.func.isRequired,
+
+  deleteAccount: PropTypes.func.isRequired,
   // ...object required ('ptor')
   auth: PropTypes.object.isRequired,
   // profile state ('ptor')
@@ -75,7 +83,9 @@ const mapStateToProps = state => ({
 });
 
 // Within 'connect' will be getting 'profile' state and as well 'auth' state.
-export default connect(mapStateToProps, { getCurrentProfile })(Dashboard);
+export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
+  Dashboard
+);
 
 /*
 When Dashboard loads, we need to pull-in current user's profile. To be able to do that we need a profile in our state, which means that we need profile-reducer, profile-action file.
