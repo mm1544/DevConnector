@@ -3,7 +3,7 @@ import axios from 'axios';
 import { setAlert } from './alert';
 
 // Importing types
-import { GET_PROFILE, PROFILE_ERROR } from './types';
+import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from './types';
 
 /*
 #Get current users profile.
@@ -78,6 +78,83 @@ export const createProfile = (
     dispatch({
       type: PROFILE_ERROR,
       // HTTP status: 'err.response.status' (eg. '400')
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add Experience Action
+// Need to pass 'history' because want to redirect back to '/dashboard'
+export const addExperience = (formData, history) => async dispatch => {
+  try {
+    // Because sending data
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const res = await axios.put('api/profile/experience', formData, config);
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      // Profile
+      payload: res.data
+    });
+
+    dispatch(setAlert('Experience Added', 'success'));
+
+    // Redirecting
+    history.push('/dashboard');
+  } catch (err) {
+    // errors array for fields of experiences
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      // If there are 'errors', then will set alerts
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add Education Action
+export const addEducation = (formData, history) => async dispatch => {
+  try {
+    // Because sending data
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const res = await axios.put('api/profile/education', formData, config);
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      // Profile
+      payload: res.data
+    });
+
+    dispatch(setAlert('Education Added', 'success'));
+
+    // Redirecting
+    history.push('/dashboard');
+  } catch (err) {
+    // errors array for fields of experiences
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      // If there are 'errors', then will set alerts
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

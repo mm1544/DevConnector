@@ -3,7 +3,12 @@ Why it is needed:
 When Dashboard loads, we need to pull-in current user's profile. To be able to do that we need a profile in our state, which means that we need profile-reducer, profile-action file.
 */
 
-import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE } from '../actions/types';
+import {
+  GET_PROFILE,
+  PROFILE_ERROR,
+  CLEAR_PROFILE,
+  UPDATE_PROFILE
+} from '../actions/types';
 
 const initialState = {
   /* After we logged the 'profile' will hold all profile-data. As well if we will wisit another users profile page, the data about that user will be stored in here as well.
@@ -25,8 +30,8 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    // To get a profile
     case GET_PROFILE:
+    case UPDATE_PROFILE:
       return {
         // current state
         ...state,
@@ -35,6 +40,7 @@ export default function(state = initialState, action) {
         // ...when the request is done
         loading: false
       };
+
     case PROFILE_ERROR:
       return {
         ...state,
