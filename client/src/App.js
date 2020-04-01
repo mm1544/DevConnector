@@ -14,6 +14,7 @@ import EditProfile from './components/profile-forms/EditProfile';
 import AddExperience from './components/profile-forms/AddExperience';
 import AddEducation from './components/profile-forms/AddEducation';
 import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
 // Route with embeded authentication
 import PrivateRoute from './components/routing/PrivateRoute';
 // 'Provider' comes from React, Redux package. Redux is separate from React but Provider will combine them together...(?) We will achieve that by surrounding entire App with Provider...
@@ -56,6 +57,7 @@ const App = () => {
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
               <Route exact path='/profiles' component={Profiles} />
+              <Route exact path='/profile/:id' component={Profile} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact
