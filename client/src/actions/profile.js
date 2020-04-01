@@ -8,11 +8,13 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
-  ACCOUNT_DELETED
+  ACCOUNT_DELETED,
+  GET_PROFILES,
+  GET_REPOS
 } from './types';
 
 /*
-#Get current users profile.
+Get Current User's Profile Action
   Will cal this action ass soon as user goes to the dashboard.
 */
 export const getCurrentProfile = () => async dispatch => {
@@ -36,8 +38,62 @@ export const getCurrentProfile = () => async dispatch => {
   }
 };
 
+// Get All Profiles Action
+export const getProfiles = () => async dispatch => {
+  // To clear whatever is in 'current profile' (because when we wisit single user's profile, the data of this profile is added to the state)
+  dispatch({ CLEAR_PROFILE });
+
+  try {
+    const res = await axios.get('/api/profile');
+
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Get Profile By ID Action
+export const getProfileById = userId => async dispatch => {
+  try {
+    const res = await axios.get(`/api/profile/user/${userId}`);
+
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Get Github Repos Action (takes as parameter Github username)
+export const getGithubRepos = username => async dispatch => {
+  try {
+    const res = await axios.get(`/api/profile/github/${username}`);
+
+    dispatch({
+      type: GET_REPOS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
 /*
-#Create or update profile
+Create or Update Profile Action
   We will want to REDIRECT after submitting form, therefore need to pass 'history' object which has a 'push' method, it will redirect to the client side route (!!!).
   In order to know if it intended to update or edit, or create new profile, will pass parameter 'edit' which by the default is false.
 */
