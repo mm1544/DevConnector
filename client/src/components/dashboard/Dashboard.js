@@ -27,8 +27,7 @@ const Dashboard = ({
   // Because we want to run it once, will pass '[]' as a second argument
   useEffect(() => {
     getCurrentProfile();
-  }, []);
-  // May need '[getCurrentProfile]'
+  }, [getCurrentProfile]);
 
   // ...if profile is NULL and it is still loading then will show the Spinner
   return loading && profile === null ? (

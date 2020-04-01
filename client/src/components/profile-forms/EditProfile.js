@@ -62,7 +62,7 @@ const EditProfile = ({
       instagram: loading || !profile.social ? '' : profile.social.instagram
     });
     // !!! if it's not set, the app may crash because it will run constantly
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   // Destructuring
   const {
