@@ -41,7 +41,7 @@ export const getCurrentProfile = () => async dispatch => {
 // Get All Profiles Action
 export const getProfiles = () => async dispatch => {
   // To clear whatever is in 'current profile' (because when we wisit single user's profile, the data of this profile is added to the state)
-  dispatch({ CLEAR_PROFILE });
+  dispatch({ type: CLEAR_PROFILE });
 
   try {
     const res = await axios.get('/api/profile');
