@@ -11,11 +11,14 @@ import { logout } from '../../actions/auth';
 Destructuring 'prop' to {...}. From 'auth' pulling 'loading' because need to make sure that loading is done before will be putting Links in.
 */
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
-  // Links seen for authenticated users
+  // Links seen by authenticated users
   const authLinks = (
     <ul>
       <li>
         <Link to='/profiles'>Developers</Link>
+      </li>
+      <li>
+        <Link to='/posts'>Posts</Link>
       </li>
       <li>
         <Link to='/dashboard'>
