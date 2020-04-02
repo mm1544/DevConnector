@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
+import ProfileTop from './ProfileTop';
+import ProfileAbout from './ProfileAbout';
 import { getProfileById } from '../../actions/profile';
 
 const Profile = ({
@@ -15,11 +17,11 @@ const Profile = ({
   useEffect(() => {
     // Will get ID from URL (props.match.params.id)
     getProfileById(match.params.id);
-  }, [getProfileById]);
+  }, [getProfileById, match.params.id]);
 
   return (
     <Fragment>
-      {/* Need to make sure that the data is loaded, because can't render UI if data is not loaded. */}
+      {/* Need to make sure that the data is loaded, because can't render UI if data is not loaded yet. */}
       {profile === null || loading ? (
         <Spinner />
       ) : (
@@ -34,6 +36,11 @@ const Profile = ({
                 Edit Profile
               </Link>
             )}
+          {/* Using css grid to position the content */}
+          <div class='profile-grid my-1'>
+            <ProfileTop profile={profile} />
+            <ProfileAbout profile={profile} />
+          </div>
         </Fragment>
       )}
     </Fragment>
@@ -48,7 +55,7 @@ Profile.propTypes = {
 
 const mapStateToProps = state => ({
   profile: state.profile,
-  // Need 'auth' state because we want to see if the user is logged-in, and if he is logged and the profile that he is viewing matches, then we want to add edit-profile button.
+  // Need 'auth' state because we want to see if the user is logged-in, and if he is logged, and the profile that he is viewing matches, then we want to add edit-profile button.
   auth: state.auth
 });
 
