@@ -4,12 +4,15 @@ import {
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POST,
-  ADD_POST
+  ADD_POST,
+  ADD_COMMENT,
+  REMOVE_COMMENT
 } from '../actions/types';
 
 // Initial state
 const initialState = {
-  post: [],
+  posts: [],
+  // 'post' is an object
   post: null,
   loading: true,
   // obj.
@@ -62,6 +65,27 @@ export default function(state = initialState, action) {
         posts: state.posts.map(post =>
           post._id === payload.id ? { ...post, likes: payload.likes } : post
         ),
+        loading: false
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        // there are all comments in the 'payload'
+        post: { ...state.post, comments: payload },
+        loading: false
+      };
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        // Need to filter-out the comments
+        post: {
+          // Current content of 'state.post'
+          ...state.post,
+          // Will bring-in all the comments except the one with matching ID ('payload' holds commentId)
+          comments: state.post.comments.filter(
+            comment => comment._id !== payload
+          )
+        },
         loading: false
       };
     default:
