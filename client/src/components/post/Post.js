@@ -6,6 +6,7 @@ import Spinner from '../layout/Spinner';
 import PostItem from '../posts/PostItem';
 import { getPost } from '../../actions/post';
 import CommentForm from './CommentForm';
+import CommentItem from './CommentItem';
 
 // 'props.match.params.id'(?) gets id from URL
 const Post = ({ getPost, post: { post, loading }, match }) => {
@@ -24,6 +25,11 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
       {/* Passing 'showActions={false}' to hide buttons. */}
       <PostItem post={post} showActions={false} />
       <CommentForm postId={post._id} />
+      <div className='comments'>
+        {post.comments.map(comment => (
+          <CommentItem key={comment._id} comment={comment} postId={post._id} />
+        ))}
+      </div>
     </Fragment>
   );
 };
