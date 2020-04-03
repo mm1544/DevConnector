@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { addLike, removeLike } from '../../actions/post';
+import { addLike, removeLike, deletePost } from '../../actions/post';
 
 const PostItem = ({
   removeLike,
   addLike,
+  deletePost,
   auth,
   post: { _id, text, name, avatar, user, likes, comments, date }
 }) => (
@@ -46,10 +47,10 @@ const PostItem = ({
           <span className='comment-count'>{comments.length}</span>
         )}
       </Link>
-      {/* Delete button is shown only if it's a user's post */}
+      {/* Delete button is shown only if given post belongs to logged-in user */}
       {!auth.loading && user === auth.user._id && (
         <button
-          // onClick={() => deletePost(_id)}
+          onClick={e => deletePost(_id)}
           type='button'
           className='btn btn-danger'
         >
@@ -64,11 +65,14 @@ PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   removeLike: PropTypes.func.isRequired,
-  addLike: PropTypes.func.isRequired
+  addLike: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { removeLike, addLike })(PostItem);
+export default connect(mapStateToProps, { removeLike, addLike, deletePost })(
+  PostItem
+);
