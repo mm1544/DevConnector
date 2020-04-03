@@ -2,7 +2,8 @@ import {
   GET_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
-  DELETE_POST
+  DELETE_POST,
+  ADD_POST
 } from '../actions/types';
 
 // Initial state
@@ -22,6 +23,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         posts: payload,
+        loading: false
+      };
+    case ADD_POST:
+      return {
+        ...state,
+        /*
+        @ Will add updated posts to the state
+        'payload' is passed first and '...state.posts' - second, because in UI I want the latest posts to be displayed frirst.
+        */
+
+        posts: [payload, ...state.posts],
         loading: false
       };
     case DELETE_POST:
