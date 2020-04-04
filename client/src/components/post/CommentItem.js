@@ -13,7 +13,7 @@ const CommentItem = ({
 }) => (
   <div class='post bg-white p-1 my-1'>
     <div>
-      <Link to={`profile/${user}`}>
+      <Link to={`/profile/${user}`}>
         <img class='round-img' src={avatar} alt='' />
         <h4>{name}</h4>
       </Link>
