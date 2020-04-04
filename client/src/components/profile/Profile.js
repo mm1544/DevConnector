@@ -25,7 +25,7 @@ const Profile = ({
   return (
     <Fragment>
       {/* Need to make sure that the data is loaded, because can't render UI if data is not loaded yet. */}
-      {profile === null || loading ? (
+      {!profile || profile === null || loading ? (
         <Spinner />
       ) : (
         <Fragment>
